@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    {%block content%}
+    <head>
+        <meta charset = "utf-8" />
+        <title>Login</title>
+        <style>
+
+            body {
+                background-color: red;
+            }
+
+            .body-content {
+                margin-top: 15%;            
+            }
+
+            /*Login half*/
+            .firstHalf{
+                width: 50%;
+                border: 5px solid black;
+                display: inline-block;
+                margin-right: 25%;
+                text-align: center;
+                background-color: white;
+                margin-left: 25%;
+                padding-bottom: 35px;
+            }
+
+            .group{
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            .btn {
+                color: black;
+                text-decoration: none;
+                margin-top: 50px;
+                width: 15%;
+                padding: 10px;
+                border: 3px solid black;
+                text-align: center;
+                margin-left: 43%;
+                background-color: white;
+            }
+
+            #link{
+                color: black;
+                text-decoration: none;
+                font-size: 40px;
+                text-align: center;
+            }
+            
+            .inLineBox{
+                display: block;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        
+        <div class="body-content">
+            <div class="firstHalf">
+                <h1>Login</h1>
+
+                <form method="post">
+                    <!--csrf_token
+                    form.as_p-->
+                    <p>Username <input type="email"></p> 
+                    <p>Password <input type="oassword"></p>
+                    <button type="submit">Login</button>
+                </form>              
+
+            </div>
+        </div>
+        <div class = "btn">
+        <a href="{%url 'new_user' %}" id = "link">New User</a>
+        </div>
+    </body>
+    {%endblock%}
+</html>
