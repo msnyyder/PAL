@@ -1,11 +1,12 @@
 from django.shortcuts import render
 
+
 # Create your views here.
 def taskPage(request):
     return render(
-        request, 
-        "taskManager/taskPage.html", 
+        request,
+        "homepage.html",
         {
-            'currentUser':request.user,
+            'currentUser': request.user,
         }
     )
