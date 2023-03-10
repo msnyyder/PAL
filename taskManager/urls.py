@@ -3,6 +3,6 @@ from . import views
 from django.contrib import admin
 
 urlpatterns = [
-    path('taskPage/', views.taskPage, name='taskPage'),
+    path('taskpage/', views.taskPage, name='taskPage'),
     
 ]

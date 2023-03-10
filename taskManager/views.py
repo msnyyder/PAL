@@ -5,7 +5,7 @@ from django.shortcuts import render
 def taskPage(request):
     return render(
         request,
-        "homepage.html",
+        "taskManager.html",
         {
             'currentUser': request.user,
         }
