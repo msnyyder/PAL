@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
 
 #Table for Schedule
 class Schedule(models.Model):
@@ -9,7 +8,9 @@ class Schedule(models.Model):
     semester = models.CharField(max_length = 6)
     year = models.IntegerField(default=2023)
     #courses could be saved as an array of the crn numbers
-    courses = ArrayField(ArrayField(models.CharField(max_length=20)))
+    #array fields will only work with Postgres database, finding another fix
+    #courses = ArrayField(ArrayField(models.CharField(max_length=20)))
+    courses = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -27,7 +28,8 @@ class Course(models.Model):
 #Table for Real Schedule
 class RealSchedule(models.Model):
     schedule = models.ForeignKey(Schedule,on_delete=models.CASCADE,related_name='real_schedule')
-    grades = ArrayField(ArrayField(models.DecimalField(max_digits=5, decimal_places=2, default=0)))
+    #grades = ArrayField(ArrayField(models.DecimalField(max_digits=5, decimal_places=2, default=0)))
+    grades = models.CharField(max_length=20)
 
     def __str__(self):
         return self.schedule.name

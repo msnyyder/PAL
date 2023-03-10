@@ -68,7 +68,7 @@
 {% block content %}
     <!--Navigation bar to return to home page or course registration-->
     <div class = "advice-block">
-        <div class = "advice"><a href="{% url 'home' %}">Home</a></div>
+        <div class = "advice"><a href="{% url 'taskPage' %}">Task Manager</a></div>
         <div class = "advice"><a href="{% url 'scheduler' %}">Course Registration</a></div>
     </div>
 
@@ -115,5 +115,5 @@
         </div>
     </div>
 </body>
-
+{%endblock%}
 </html>
