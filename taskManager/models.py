@@ -17,9 +17,9 @@ class Task(models.Model):
     category = models.ForeignKey(Category,on_delete=models.DO_NOTHING,related_name='task_category')
     title = models.CharField(max_length=20)
     content = models.CharField(max_length=100)
-    startDate = models.DateTimeField(default= date.today)
-    endDate = models.DateTimeField(default= date.today)
-    reminderDate = models.DateTimeField(default = date.today)
+    startDate = models.DateTimeField(auto_now_add=False)
+    endDate = models.DateTimeField(auto_now_add=False)
+    reminderDate = models.DateTimeField(auto_now_add=False)
     notificationsOn = models.BooleanField(default=True)
 
     def __str__(self):

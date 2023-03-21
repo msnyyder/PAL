@@ -23,6 +23,12 @@
             
             h1{
                 text-align: center;
+                text-decoration: underline;
+                color: white;
+            }
+
+            h2{
+                text-decoration: underline;
             }
             
             .box1, .box2{
@@ -30,7 +36,6 @@
                 display: inline-block;
                 height: 350px;
                 text-align: center;
-                text-decoration: underline;
             }
             
             .box1 {
@@ -40,6 +45,20 @@
             
             .box2 {
                 width: 30%;
+            }
+
+            /*formatting for tasks in the for loop*/
+            #taskBox {
+                text-align: left;
+                text-decoration: none;
+                margin: 2%;
+                box-shadow: 5px 5px 10px black;
+                padding: 2%;
+                
+            }
+
+            #dateText {
+                font-size: 12px;
             }
             
             .btn {
@@ -56,6 +75,8 @@
                 text-decoration: none;
                 font-size: 25px;
             }
+
+            
         </style>
     </head>
     <body>
@@ -69,7 +90,18 @@
         
         <div class = "box">
         
-            <div class = "box1"><h2>Task Calendar</h2></div>
+            <div class = "box1">
+                <h2>{{chosenCategory.name}} Task Calendar</h2>
+                {%for task in tasks%}
+                <div id = "taskBox">
+                    <b>{{task.title}}</b> 
+                    <div id = "dateText">{{task.startDate}} : {{task.endDate}}</div>
+                    <br>
+                    {{task.content}}
+                    <br>
+                </div>
+                {%endfor%}
+            </div>
         
             <div class = "box2"><h2>Comment Forum</h2></div>
         
