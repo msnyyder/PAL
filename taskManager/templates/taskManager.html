@@ -112,9 +112,9 @@
         <br>
         <div class = "btn"><a class = "btnTxt" href="google.com">Switch Category</a></div>
         <br>
-        <div class = "btn"><a class = "btnTxt" href="google.com">Add Category</a></div>
+        <div class = "btn"><a class = "btnTxt" href="{%url 'new_category'%}">Add Category</a></div>
         <br>
-        <div class = "btn"><a class = "btnTxt" href="google.com">Add Task</a></div>
+        <div class = "btn"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></div>
         <br>
         <div class = "btn"><a class = "btnTxt"  href="{% url 'scheduler' %}">Course Scheduler</a></div>
     </body>
