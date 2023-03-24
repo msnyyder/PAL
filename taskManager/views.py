@@ -12,10 +12,28 @@ def taskPage(request):
     defaultCategory = Category.objects.filter(name = "Academic")
 
     #automatically create Academic category if it does not exist
-    defaultCategory = defaultCategory[0]
+    switch_category = defaultCategory[0]
+    
+    #get selected option from dropdown menu
+    if request.GET.get('dropdown') != None:
+        switch_category = request.GET.get('dropdown')
 
-    taskstemp = Task.objects.filter(category = defaultCategory)
+    if request.method == 'POST':
+        sCategory_form = SwitchCategoryForm(data = request.POST)
+        if sCategory_form.is_valid():
+            #create category object
+            #switch_category = sCategory_form.save(commit=False)
+            switch_category_name = sCategory_form.save(commit=False)
+
+            #switch_category.save()
+            switch_category = Category.objects.filter(name = switch_category_name)[0]
+
+    else:
+        sCategory_form = SwitchCategoryForm()
+
+    taskstemp = Task.objects.filter(category = switch_category)
     tasks = taskstemp.filter(user = request.user)
+
 
     return render(
         request,
@@ -24,7 +42,8 @@ def taskPage(request):
             'currentUser': request.user,
             'categories': categories,
             'tasks': tasks,
-            'chosenCategory': defaultCategory,
+            'chosenCategory': switch_category,
+            'form': sCategory_form,
         }
     )
 
@@ -38,6 +57,16 @@ def switchCategory(request, cat):
     taskstemp = Task.objects.filter(category = category)
     tasks = taskstemp.filter(user = request.user)
 
+    if request.method == 'GET':
+        sCategory_form = SwitchCategoryForm(data = request.GET)
+        if sCategory_form.is_valid():
+            #create category object
+            switch_category = sCategory_form.save(commit=False)
+            #switch_category.save()
+    else:
+        sCategory_form = SwitchCategoryForm()
+
+
     return render(
         request,
         "taskManager.html",
@@ -46,6 +75,8 @@ def switchCategory(request, cat):
             'categories': categories,
             'tasks': tasks,
             'chosenCategory': category,
+            'form': sCategory_form,
+            'switched': switch_category,
         }
     )
 

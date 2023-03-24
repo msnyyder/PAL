@@ -30,6 +30,8 @@
             h2{
                 text-decoration: underline;
             }
+
+            
             
             .box1, .box2{
                 background-color: white;
@@ -51,10 +53,9 @@
             #taskBox {
                 text-align: left;
                 text-decoration: none;
-                margin: 2%;
                 box-shadow: 5px 5px 10px black;
-                padding: 2%;
-                
+                padding: 2%;   
+                margin: 2%;             
             }
 
             #dateText {
@@ -108,10 +109,30 @@
         
         </div>
     
-    
+        <!--List of all available categories to the current user-->
+        <select name = "dropdown">
+            <option selected="selected" disabled>Select Category:</option>
+            {%for cat in categories%}
+                <option value = "{{cat}}">{{cat}}</option>
+            {%endfor%}
+        </select>
+
         <br>
-        <div class = "btn"><a class = "btnTxt" href="google.com">Switch Category</a></div>
+        <div class = "btn"><a class = "btnTxt" href="{%url 'taskPage'%}">Switch Category</a></div>
         <br>
+
+        <h3>Available Category Options</h3>
+        {%for cat in categories%}
+            <p>{{cat}}</p>
+        {%endfor%}
+
+        <form method="post" style="margin-top: 1.3em;">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit" class="btn2">Submit</button>
+        </form>
+
+
         <div class = "btn"><a class = "btnTxt" href="{%url 'new_category'%}">Add Category</a></div>
         <br>
         <div class = "btn"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></div>

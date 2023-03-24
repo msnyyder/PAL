@@ -1,3 +1,4 @@
+from urllib import request
 from .models import *
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -12,3 +13,11 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('title', 'content', 'startDate', 'endDate', 'notificationsOn', 'reminderDate')
+
+class SwitchCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name',)
+    #allCategories = forms.ModelChoiceField(queryset = Category.objects.all())
+
+
