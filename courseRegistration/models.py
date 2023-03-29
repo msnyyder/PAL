@@ -1,6 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+#Table for User
+class UserExtended(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=100)
+    netId = models.CharField(max_length=25)
+    netPassword = models.CharField(max_length=50)
+    takenCourses = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.user.username
+
+
 #Table for Schedule
 class Schedule(models.Model):
     user = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='schedule')

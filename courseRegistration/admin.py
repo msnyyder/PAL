@@ -1,6 +1,12 @@
 from django.contrib import admin
 from .models import *
 
+#display all extended users
+class ExtendedUserDisplay(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'netId', 'netPassword', 'takenCourses')
+    search_fields = ('user',)
+admin.site.register(UserExtended, ExtendedUserDisplay)
+
 #display all schedules
 class ScheduleDisplay(admin.ModelAdmin):
     list_display = ('name', 'semester', 'year', 'courses')
