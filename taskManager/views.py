@@ -15,18 +15,18 @@ def taskPage(request):
     switch_category = defaultCategory[0]
     
     #get selected option from dropdown menu
-    if request.GET.get('dropdown') != None:
-        switch_category = request.GET.get('dropdown')
+    #if request.GET.get('dropdown') != None:
+    #    switch_category = request.GET.get('dropdown')
 
     if request.method == 'POST':
         sCategory_form = SwitchCategoryForm(data = request.POST)
         if sCategory_form.is_valid():
             #create category object
             #switch_category = sCategory_form.save(commit=False)
-            switch_category_name = sCategory_form.save(commit=False)
+            oneName = sCategory_form.cleaned_data['allCategories']
 
             #switch_category.save()
-            switch_category = Category.objects.filter(name = switch_category_name)[0]
+            switch_category = Category.objects.filter(name = oneName)[0]
 
     else:
         sCategory_form = SwitchCategoryForm()

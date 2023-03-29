@@ -36,8 +36,9 @@
             .box1, .box2{
                 background-color: white;
                 display: inline-block;
-                height: 350px;
+                /*height: 350px;*/
                 text-align: center;
+                margin-bottom: 5%;
             }
             
             .box1 {
@@ -104,12 +105,33 @@
                 {%endfor%}
             </div>
         
-            <div class = "box2"><h2>Comment Forum</h2></div>
+            <div class = "box2">
+                <h2>Task Calendar</h2>
+
+                <table>
+                    <tr>
+                        <td>Su</td>
+                        <td>Mo</td>
+                        <td>Tu</td>
+                        <td>We</td>
+                        <td>Th</td>
+                        <td>Fr</td>
+                        <td>Sa</td>
+
+                    </tr>
+
+                </table>
+                <div id = "demo"></div>
+
+            
+            </div>
         
         
         </div>
     
         <!--List of all available categories to the current user-->
+        
+        
         <select name = "dropdown">
             <option selected="selected" disabled>Select Category:</option>
             {%for cat in categories%}
@@ -138,6 +160,23 @@
         <div class = "btn"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></div>
         <br>
         <div class = "btn"><a class = "btnTxt"  href="{% url 'scheduler' %}">Course Scheduler</a></div>
+        
+        <script>
+            var x ="", i, j;
+            var cnt = 1;
+            x = x + "<table>";
+            for(j = 1; j <=5; j++){
+                x = x + "<tr>";
+                for (i=1; i<=7 && cnt <= 31; i++) {
+                    x = x + "<td>" + cnt + "</td>";
+                    cnt = cnt + 1;
+                }
+                x = x + "</tr>";
+            }
+            x = x + "</table>";
+            document.getElementById("demo").innerHTML = x;
+        </script>
+    
     </body>
 
 </html>
