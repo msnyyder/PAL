@@ -3,7 +3,7 @@
 {%block content%}
  <head>
     <meta charset="utf-8" />
-    <title>CS 496 Project Design Practice</title>
+    <title>Course Scheduler</title>
     <style>
         body{
             padding:12px;
@@ -21,6 +21,17 @@
             text-align: center;
             width: 5%;
             height: 5%;
+        }
+
+        .homeBtn {
+            display: inline-block;
+            float: left;
+        }
+
+        .homeBtnLink{
+            text-decoration: none;
+            color: black;
+            font-size: 40px;
         }
             
         h1{
@@ -68,9 +79,10 @@
     </head>
     <body>
         <div class = "advice-block">
+            <div class = "homeBtn"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
             <div class = "advice"><a href = "google.com">Zoom</a></div>
             <div class = "advice"><a href = "google.com">Chat</a></div>
-            <div class = "advice"><a href = "google.com">Profile</a></div>
+            <div class = "advice"><a href = "{%url 'profile'%}">Profile</a></div>
         </div>
         <br>
         <h1>Course Scheduler</h1>

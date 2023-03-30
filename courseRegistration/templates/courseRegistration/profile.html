@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+{% extends 'courseRegistration/base.html' %}
+ <head>
+    <meta charset="utf-8" />
+    <title>User Profile</title>
+    <style>
+        body{
+            padding:12px;
+            background-color: red;
+        }
+            
+        h1{
+            text-align: center;
+        }
+        
+        #btn {
+            width: 20%;
+            background-color: lightgray;
+            color: white;
+            text-align: center;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: black 5px 5px 5px;
+        }
+            
+        #btnTxt {
+            color: black;
+            text-decoration: none;
+            font-size: 25px;
+        }
+    </style>
+    </head>
+    <body>
+    {%block content%}
+        
+        <br>
+        <h1>{{currentUser.username}}</h1>
+        <h2>{{fullName}}</h2>
+        <p>Major: {{currentUserEx.major}}</p>
+        <br>
+
+        <!--Display all courses already taken by user-->
+        <h3>Courses Taken:</h3>
+        <li>
+            {%for course in coursesTaken%}
+                <ul>{{course}}</ul>
+            {%endfor%}
+        </li>
+
+        <!--Add more courses to list of taken courses-->
+        <div class="card-body">
+            {% if new_added_course %}
+                <a class="nav-link" href="{%url 'profile'%}">Reload</a>
+            {% else %}
+            <div class = "box">
+            <h3 class="header">Add Course</h3>
+            <form method="post" style="margin-top: 1.3em;">
+                {{ existingCourseForm.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="btn2">Submit</button>
+            </form>
+            </div>
+        {% endif %}
+        </div>
+
+        <br>
+        <div id = "btn"><a id = "btnTxt" href="{% url 'taskPage' %}">Task Manager</a></div>
+        <div id = "btn"><a id = "btnTxt"  href="{% url 'scheduler' %}">Course Scheduler</a></div>
+    
+        
+    </body>
+    {%endblock%}
+</html>

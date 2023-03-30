@@ -8,6 +8,14 @@ class UserExtended(models.Model):
     netId = models.CharField(max_length=25)
     netPassword = models.CharField(max_length=50)
     takenCourses = models.CharField(max_length=300)
+    major = models.CharField(
+        max_length=5,
+        choices=(
+            ("math", "MATH"),
+            ("cs", "CS")
+        ),
+        default = "CS",
+    )
 
     def __str__(self):
         return self.user.username
