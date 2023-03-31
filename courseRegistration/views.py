@@ -63,10 +63,12 @@ def profile(request):
     new_added_course = None
     existsVal = True
     form = None
+    isAdvisor = False
 
     if(currentUserEx.exists()):
         currentUserEx = currentUserEx[0]
         coursesTaken = currentUserEx.takenCourses.split(",")
+        isAdvisor = currentUserEx.advisor
     
         #add course to list of already taken courses for user
         if request.method == 'POST':
@@ -96,6 +98,7 @@ def profile(request):
             'existingCourseForm': form,
             'new_added_course': new_added_course,
             'existsVal': existsVal,
+            'isAdvisor': isAdvisor,
         }
     )
 

@@ -3,8 +3,8 @@ from .models import *
 
 #display all extended users
 class ExtendedUserDisplay(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'netId', 'netPassword', 'takenCourses', 'major')
-    search_fields = ('user', 'major')
+    list_display = ('user', 'advisor', 'phone_number', 'netId', 'netPassword', 'takenCourses', 'major')
+    search_fields = ('user', 'major', 'advisor')
 admin.site.register(UserExtended, ExtendedUserDisplay)
 
 #display all schedules

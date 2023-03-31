@@ -37,37 +37,47 @@
         <h1>{{currentUser.username}}</h1>
         <h2>{{fullName}}</h2>
 
-        {%if existsVal%}
-            <p>Major: {{currentUserEx.major}}</p>
-        {%else%}
+        <!--Extended user information not found-->
+        {%if existsVal == False%}
             <a href = "{%url 'new_user2'%}">Additional Information Needed</a>
-        {%endif%}
-        <br>
-
-        <!--Display all courses already taken by user-->
-        <h3>Courses Taken:</h3>
-        <li>
-            {%for course in coursesTaken%}
-                <ul>{{course}}</ul>
-            {%endfor%}
-        </li>
-
-        <!--Add more courses to list of taken courses-->
-        <div class="card-body">
-            {% if new_added_course %}
-                <a class="nav-link" href="{%url 'profile'%}">Reload</a>
-            {% else %}
-            <div class = "box">
-            <h3 class="header">Add Course</h3>
-            <form method="post" style="margin-top: 1.3em;">
-                {{ existingCourseForm.as_p }}
-                {% csrf_token %}
-                <button type="submit" class="btn2">Submit</button>
-            </form>
-            </div>
-        {% endif %}
-        </div>
         
+        {%else%}
+            <p>Major: {{currentUserEx.major}}</p>
+            <br>
+            <!--if the user is a student-->
+            {%if isAdvisor == False%}
+                <h3>Student View</h3>
+                <!--Display all courses already taken by user-->
+                <h3>Courses Taken:</h3>
+                <li>
+                    {%for course in coursesTaken%}
+                        <ul>{{course}}</ul>
+                    {%endfor%}
+                </li>
+
+                <!--Add more courses to list of taken courses-->
+                <div class="card-body">
+                    {% if new_added_course %}
+                       <a class="nav-link" href="{%url 'profile'%}">Reload</a>
+                    {% else %}
+                    <div class = "box">
+                    <h3 class="header">Add Course</h3>
+                    <form method="post" style="margin-top: 1.3em;">
+                        {{ existingCourseForm.as_p }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn2">Submit</button>
+                    </form>
+                    </div>
+            
+                    {% endif %}
+                </div>
+
+            <!--Current user is an advisor-->
+            {% else %}
+                <h3>Advisor View</h3>
+
+            {%endif%}
+        {%endif%}
     </body>
     {%endblock%}
 </html>

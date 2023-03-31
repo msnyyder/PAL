@@ -25,5 +25,5 @@ class NewUserForm(UserCreationForm):
 class NewExtendedUserForm(forms.ModelForm):
     class Meta:
         model = UserExtended
-        fields = ('netId', 'major')
+        fields = ('advisor', 'netId', 'major')
         

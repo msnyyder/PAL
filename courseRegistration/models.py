@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class UserExtended(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=100)
+    advisor = models.BooleanField(default = False)
     netId = models.CharField(max_length=25)
     netPassword = models.CharField(max_length=50)
     takenCourses = models.CharField(max_length=300)
