@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-    {%block content%}
     <head>
         <meta charset = "utf-8" />
         <title>Login</title>
@@ -14,21 +13,24 @@
                 margin-top: 15%;            
             }
 
-            /*Login half*/
-            .firstHalf{
-                width: 50%;
-                border: 5px solid black;
-                display: inline-block;
-                margin-right: 25%;
-                text-align: center;
-                background-color: white;
-                margin-left: 25%;
-                padding-bottom: 35px;
-            }
-
+            
             .group{
                 display: block;
                 margin-bottom: 20px;
+            }
+
+            /*Sign Up Half*/
+            .box{
+                width: 50%;
+                border: 5px solid black;
+                display: inline-block;
+                margin-left: 25%;
+                text-align: center;
+                background-color: white;
+            }
+
+            button {
+                margin-bottom: 30px;
             }
 
             .btn {
@@ -41,6 +43,7 @@
                 text-align: center;
                 margin-left: 43%;
                 background-color: white;
+                margin-bottom: 80px;
             }
 
             #link{
@@ -49,10 +52,7 @@
                 font-size: 40px;
                 text-align: center;
             }
-            
-            .inLineBox{
-                display: block;
-            }
+
 
         </style>
 
@@ -60,20 +60,22 @@
     <body>
         
         <div class="body-content">
-            <div class="firstHalf">
-                <h1>Login</h1>
 
-                <form method="post">
-                    {%csrf_token%}
-                    {{form.as_p}}     
-                    <button type="submit">Login</button>
-                </form>              
+            <div class ="box"> 
+                <h1>Sign Up</h1>
 
+                <div class="container py-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ register_form}}  
+                        <br><br>                  
+                        <button class="register-btn" type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
+            <div class = "btn">
+                <a href="{%url 'login' %}" id = "link">Return To Login</a>
             </div>
         </div>
-        <div class = "btn">
-            <a href="{%url 'new_user' %}" id = "link">New User</a>
-        </div>
     </body>
-    {%endblock%}
 </html>
