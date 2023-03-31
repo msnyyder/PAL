@@ -38,11 +38,9 @@
         <h2>{{fullName}}</h2>
 
         {%if existsVal%}
-        <p>Major: {{currentUserEx.major}}</p>
+            <p>Major: {{currentUserEx.major}}</p>
         {%else%}
-        <p>Major: {{currentUserEx.major}}</p>
-        <a href = "{%url 'new_user2'%}">Additional Information Needed</a>
-       
+            <a href = "{%url 'new_user2'%}">Additional Information Needed</a>
         {%endif%}
         <br>
 
