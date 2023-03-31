@@ -42,6 +42,10 @@ def new_user2(request):
             #assign current user to category
             new_user.user = request.user
             new_user.save()
+
+            #create the Academic task category for the new user
+            academicCategory = Category.objects.create(user = currentUser, name = "Academic")
+            academicCategory.save()
     else:
         user_form = NewExtendedUserForm()
 

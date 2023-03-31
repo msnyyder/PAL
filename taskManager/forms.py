@@ -18,7 +18,8 @@ class TaskForm(forms.ModelForm):
 
 class SwitchCategoryForm(Form):
     allCategories = forms.ModelChoiceField(queryset = Category.objects.all())
-
+    #allCategories = forms.ModelChoiceField(queryset = Category.objects.filter(user__id = 1))
+    
 
 
 

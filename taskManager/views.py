@@ -10,7 +10,7 @@ def taskPage(request):
     #get all of the current user's categories 
     categories = Category.objects.filter(user = request.user)
     #get all tasks for default category group
-    defaultCategory = Category.objects.filter(name = "Academic")
+    defaultCategory = Category.objects.filter(name = "Academic", user = request.user)
 
     #automatically create Academic category if it does not exist
     switch_category = defaultCategory[0]
@@ -18,16 +18,15 @@ def taskPage(request):
     #get selected option from dropdown menu
     #if request.GET.get('dropdown') != None:
     #    switch_category = request.GET.get('dropdown')
-
+    
     if request.method == 'POST':
         sCategory_form = SwitchCategoryForm(data = request.POST)
         if sCategory_form.is_valid():
             #create category object
             #switch_category = sCategory_form.save(commit=False)
             oneName = sCategory_form.cleaned_data['allCategories']
-
             #switch_category.save()
-            switch_category = Category.objects.filter(name = oneName)[0]
+            switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
 
     else:
         sCategory_form = SwitchCategoryForm()
