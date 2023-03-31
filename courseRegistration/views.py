@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
-import logging
+from datetime import datetime
 from .models import *
+from taskManager.models import *
 from .forms import *
 import os
 
@@ -98,7 +99,6 @@ def profile(request):
         }
     )
 
-
 def courseRegister(request):
     return render(
         request, 
@@ -109,7 +109,14 @@ def courseRegister(request):
     )
 
 def home(request):
+    #list of all tasks
+    allTasks = Task.objects.filter(user = request.user)
+    today = datetime.today()
+    todaysTasks = allTasks.filter(endDate__year = today.year, endDate__month = today.month, endDate__day = today.day)
     return render(
         request, 
         "courseRegistration/home.html", 
+        {
+            'todaysTasks':todaysTasks,
+        }
     )

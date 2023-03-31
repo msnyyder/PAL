@@ -103,10 +103,13 @@
             <div class="col-auto col-md-4" style="height: 525px;padding: 12px;border-radius: 14px;background: var(--bs-gray-200);margin: -0.999%;margin-left: 43px;margin-bottom: 0px;margin-top: 3%;width: 34%;">
                 <h1 style="text-align: center;font-family: Alef, sans-serif;font-weight: bold;">To-Do</h1>
                 <ul class="list-unstyled">
-                    <li>Item 1</li>
+                    <!--<li>Item 1</li>
                     <li>Item 2</li>
                     <li>Item 3</li>
-                    <li>Item 4</li>
+                    <li>Item 4</li>-->
+                    {%for task in todaysTasks%}
+                        <li>{{task.title}}</li>
+                    {%endfor%}
                 </ul>
             </div>
         </div>
