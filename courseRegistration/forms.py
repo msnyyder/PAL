@@ -5,8 +5,13 @@ from django.forms import Form
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-class ExistingCourseForm(Form):
-    allCourses = forms.ModelChoiceField(queryset = Course.objects.all())
+#class ExistingCourseForm(Form):
+#    allCourses = forms.ModelChoiceField(queryset = Course.objects.all())
+
+class CourseTakenForm(forms.ModelForm):
+    class Meta:
+        model = CourseTaken
+        fields = ('course',)
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required = True)

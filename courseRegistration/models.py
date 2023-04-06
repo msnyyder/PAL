@@ -8,7 +8,6 @@ class UserExtended(models.Model):
     advisor = models.BooleanField(default = False)
     netId = models.CharField(max_length=25)
     netPassword = models.CharField(max_length=50)
-    takenCourses = models.CharField(max_length=300)
     major = models.CharField(
         max_length=5,
         choices=(
@@ -40,11 +39,25 @@ class Schedule(models.Model):
 class Course(models.Model):
     title = models.CharField(max_length=20)
     crn = models.CharField(max_length=20)
+    subject = models.CharField(max_length = 4, default = "CS")
+    course = models.IntegerField(default = 0)
     creditHours = models.IntegerField(default = 0)
-    description = models.CharField(max_length=100)
+    time = models.CharField(max_length = 20, default = "")
+    day = models.CharField(max_length = 3, default = "TR")
+    instructor = models.CharField(max_length=40, default = "")
+    year = models.IntegerField(default=2020)
+    term = models.CharField(max_length = 10, default="")
 
     def __str__(self):
         return self.title
+    
+#Table for Courses Taken
+class CourseTaken(models.Model):
+    user = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='user_of_course')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.course.title
     
 #Table for Real Schedule
 class RealSchedule(models.Model):

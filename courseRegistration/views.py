@@ -71,23 +71,24 @@ def profile(request):
 
     if(currentUserEx.exists()):
         currentUserEx = currentUserEx[0]
-        coursesTaken = currentUserEx.takenCourses.split(",")
         isAdvisor = currentUserEx.advisor
+        coursesTaken = CourseTaken.objects.filter(user = currentUser)
     
         #add course to list of already taken courses for user
         if request.method == 'POST':
-            form = ExistingCourseForm(data = request.POST)
+            form = CourseTakenForm(data = request.POST)
             if form.is_valid():
                 #create category object
                 #switch_category = sCategory_form.save(commit=False)
-                addedCourse = form.cleaned_data['allCourses']
+                addedCourse = form.save(commit=False)
+                addedCourse.user = currentUser
+                addedCourse.save()
 
-                #switch_category.save()
-                new_added_course = Course.objects.filter(title = addedCourse)[0]
-                currentUserEx.takenCourses = currentUserEx.takenCourses + new_added_course.title + ", "
-                currentUserEx.save()
+            #create the Academic task category for the new user
+            academicCategory = Category.objects.create(user = currentUser, name = "Academic")
+            academicCategory.save()
         else:
-            form = ExistingCourseForm()
+            form = CourseTakenForm()
     else:
         existsVal = False
 
