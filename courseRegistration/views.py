@@ -110,7 +110,7 @@ def profile(request):
 def courseRegister(request):
     return render(
         request, 
-        "courseRegistration/scheduler.html", 
+        "courseRegistration/schedulerFinal.html",
         {
             'currentUser':request.user,
         }
