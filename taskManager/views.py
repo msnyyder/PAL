@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 from .forms import *
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 
 
 # Create your views here.
@@ -9,13 +10,43 @@ def taskPage(request):
     #get all of the current user's categories 
     categories = Category.objects.filter(user = request.user)
     #get all tasks for default category group
-    defaultCategory = Category.objects.filter(name = "Academic")
+    defaultCategory = Category.objects.filter(name = "Academic", user = request.user)
 
     #automatically create Academic category if it does not exist
-    defaultCategory = defaultCategory[0]
+    switch_category = defaultCategory[0]
+    
+    #get selected option from dropdown menu
+    #if request.GET.get('dropdown') != None:
+    #    switch_category = request.GET.get('dropdown')
+    
+    if request.method == 'POST':
+        sCategory_form = SwitchCategoryForm(data = request.POST)
+        if sCategory_form.is_valid():
+            #create category object
+            #switch_category = sCategory_form.save(commit=False)
+            oneName = sCategory_form.cleaned_data['allCategories']
+            #switch_category.save()
+            switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
 
-    taskstemp = Task.objects.filter(category = defaultCategory)
+    else:
+        sCategory_form = SwitchCategoryForm()
+
+    #list of all tasks
+    taskstemp = Task.objects.filter(category = switch_category)
     tasks = taskstemp.filter(user = request.user)
+
+    #list of all the enddates for every task
+    listOfDays = tasks.values('endDate')
+
+    #values for the current date
+    currentDay = datetime.now().day
+    currentMonth = datetime.now().month
+    currentYear = datetime.now().year
+    amountOfDays = getDays(currentMonth, currentYear)
+
+    #get first day of the week (weekday) for calendar
+    firstDate = datetime(currentYear, currentMonth, 1)
+    startWeekDay = firstDate.weekday()
 
     return render(
         request,
@@ -24,28 +55,13 @@ def taskPage(request):
             'currentUser': request.user,
             'categories': categories,
             'tasks': tasks,
-            'chosenCategory': defaultCategory,
-        }
-    )
-
-#switch the category and show all tasks within selected category
-def switchCategory(request, cat):
-    #get all of the current user's categories for selected category
-    categories = Category.objects.filter(user = request.user)
-    category = categories.filter(name = cat)
-    category = category[0]
-
-    taskstemp = Task.objects.filter(category = category)
-    tasks = taskstemp.filter(user = request.user)
-
-    return render(
-        request,
-        "taskManager.html",
-        {
-            'currentUser': request.user,
-            'categories': categories,
-            'tasks': tasks,
-            'chosenCategory': category,
+            'chosenCategory': switch_category,
+            'form': sCategory_form,
+            'days': amountOfDays,
+            'month': currentMonth,
+            'currentDay': currentDay,
+            'listOfDays': listOfDays,
+            'startWeekDay':startWeekDay,
         }
     )
 
@@ -106,3 +122,18 @@ def addTask(request, category):
             'task_form': task_form,
         }
     )
+
+#get the amount of days in the current month
+def getDays(month, year):
+    if(month == 2):
+        if(year % 400 == 0 or (year % 100 != 0 and year % 4 == 0)):
+            #is a leap year
+            days = 29
+        else:
+            #is not a leap year
+            days = 28
+    elif(month == 4 or month == 6 or month == 9 or month == 11):
+        days = 30
+    else:
+        days = 31   
+    return days

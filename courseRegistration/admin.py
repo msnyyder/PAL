@@ -1,6 +1,12 @@
 from django.contrib import admin
 from .models import *
 
+#display all extended users
+class ExtendedUserDisplay(admin.ModelAdmin):
+    list_display = ('user', 'advisor', 'phone_number', 'netId', 'netPassword', 'major')
+    search_fields = ('user', 'major', 'advisor')
+admin.site.register(UserExtended, ExtendedUserDisplay)
+
 #display all schedules
 class ScheduleDisplay(admin.ModelAdmin):
     list_display = ('name', 'semester', 'year', 'courses')
@@ -18,6 +24,13 @@ admin.site.register(DraftSchedule, DraftScheduleDisplay)
 
 #display all courses
 class CourseDisplay(admin.ModelAdmin):
-    list_display = ('title', 'crn', 'creditHours', 'description')
+    list_display = ('title', 'crn', 'subject', 'course', 'creditHours', 'time', 'day', 'instructor', 'year', 'term')
     search_fields = ('crn', 'title', 'creditHours')
 admin.site.register(Course, CourseDisplay)
+
+#display all courses taken
+class CoursesTakenDisplay(admin.ModelAdmin):
+    list_display = ('user', 'course')
+    search_fields = ('user', 'course')
+admin.site.register(CourseTaken, CoursesTakenDisplay)
+

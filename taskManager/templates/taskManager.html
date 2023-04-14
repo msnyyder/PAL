@@ -20,41 +20,62 @@
                 width: 5%;
                 height: 5%;
             }
-            
-            h1{
-                text-align: center;
-                text-decoration: underline;
-                color: white;
+
+            .homeBtn {
+                display: inline-block;
+                float: left;
             }
 
-            h2{
+            .homeBtnLink{
+                text-decoration: none;
+                color: black;
+                font-size: 40px;
+            }
+
+            h1, h2{
+                text-align: center;
                 text-decoration: underline;
             }
             
             .box1, .box2{
                 background-color: white;
+                margin-bottom: 5%;
                 display: inline-block;
-                height: 350px;
-                text-align: center;
             }
             
             .box1 {
                 width: 60%;
                 margin-right: 5%;
+                text-align: center;
+                vertical-align: top;
             }
             
+            /*format task calendar*/
             .box2 {
-                width: 30%;
+                padding: 3%;
+                padding-top: 0%;
+                width: fit-content;
+            }
+
+            .weekdays {
+                margin: 0;
+                padding: 10px 0;
+                background-color: #ddd;
+            }
+              
+            .weekdays td {
+                width: 15%;
+                color: #666;
+                text-align: center;
             }
 
             /*formatting for tasks in the for loop*/
             #taskBox {
                 text-align: left;
                 text-decoration: none;
-                margin: 2%;
                 box-shadow: 5px 5px 10px black;
-                padding: 2%;
-                
+                padding: 2%;   
+                margin: 2%;             
             }
 
             #dateText {
@@ -77,19 +98,22 @@
             }
 
             
+
+            
         </style>
     </head>
     <body>
         <div class = "advice-block">
+            <div class = "homeBtn"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
+            <div class = "advice"><a href = "{%url 'login'%}">Login</a></div>
             <div class = "advice"><a href = "google.com">Video</a></div>
             <div class = "advice"><a href = "google.com">Chat</a></div>
-            <div class = "advice"><a href = "google.com">Profile</a></div>
+            <div class = "advice"><a href = "{%url 'profile'%}">Profile</a></div>
         </div>
-        <br>
+        <br> 
         <h1>Task Manager</h1>
-        
+
         <div class = "box">
-        
             <div class = "box1">
                 <h2>{{chosenCategory.name}} Task Calendar</h2>
                 {%for task in tasks%}
@@ -102,21 +126,94 @@
                 </div>
                 {%endfor%}
             </div>
-        
-            <div class = "box2"><h2>Comment Forum</h2></div>
-        
-        
+            <div class = "box2">
+                <h2>Task Calendar</h2>
+                <table>
+                    <tr class = "weekdays">
+                        <td>Su</td>
+                        <td>Mo</td>
+                        <td>Tu</td>
+                        <td>We</td>
+                        <td>Th</td>
+                        <td>Fr</td>
+                        <td>Sa</td>
+                    </tr>
+                </table>
+                <div id = "calendar"></div>
+            </div>
         </div>
     
-    
+        <!--List of all available categories to the current user-->
         <br>
-        <div class = "btn"><a class = "btnTxt" href="google.com">Switch Category</a></div>
+        <!--<select name = "dropdown">
+            <option selected="selected" disabled>Select Category:</option>
+            {%for cat in categories%}
+                <option value = "{{cat}}">{{cat}}</option>
+            {%endfor%}
+        </select>-
+
         <br>
+        <div class = "btn"><a class = "btnTxt" href="{%url 'taskPage'%}">Switch Category</a></div>
+        <br>-->
+
+        <h3>Available Category Options</h3>
+        {%for cat in categories%}
+            <p>{{cat}}</p>
+        {%endfor%}
+
+        <form method="post" style="margin-top: 1.3em;">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit" class="btn2">Submit</button>
+        </form>
+
+
         <div class = "btn"><a class = "btnTxt" href="{%url 'new_category'%}">Add Category</a></div>
         <br>
         <div class = "btn"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></div>
         <br>
         <div class = "btn"><a class = "btnTxt"  href="{% url 'scheduler' %}">Course Scheduler</a></div>
-    </body>
 
+        <script>
+            var x ="", i, j;
+            var cnt = 1;
+            var spaceCnt = 0;
+            x = x + "<table>";
+
+            x = x + "<tr>";
+            //first row of table
+            for(s = 1; s <= 7; s++){
+                //print spaces
+                if(spaceCnt <= {{startWeekDay}}){
+                    x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>  </td>";
+
+                    spaceCnt = spaceCnt + 1;
+                }
+                else{
+                    if(cnt == {{currentDay}})
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
+                    else
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
+                
+                    cnt = cnt + 1;
+                }
+            }
+            x = x + "</tr>";
+
+            for(j = 1; j <=5; j++){
+                x = x + "<tr>";
+                for (i=1; i<=7 && cnt <= {{days}}; i++) {
+                    if(cnt == {{currentDay}})
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
+                    else
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
+
+                    cnt = cnt + 1;
+                }
+                x = x + "</tr>";
+            }
+            x = x + "</table>";
+            document.getElementById("calendar").innerHTML = x;
+        </script>
+    </body>
 </html>
