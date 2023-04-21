@@ -60,37 +60,43 @@ def new_user2(request):
     )
 
 def profile(request):
+    #initial variables
     currentUser = request.user
-    currentUserEx = UserExtended.objects.filter(user = request.user)
-
+    currentUserEx = None
+    fullName = ""
     coursesTaken = ""
     new_added_course = None
     existsVal = True
     form = None
     isAdvisor = False
 
-    if(currentUserEx.exists()):
-        currentUserEx = currentUserEx[0]
-        isAdvisor = currentUserEx.advisor
-        coursesTaken = CourseTaken.objects.filter(user = currentUser)
-    
-        #add course to list of already taken courses for user
-        if request.method == 'POST':
-            form = CourseTakenForm(data = request.POST)
-            if form.is_valid():
-                #create category object
-                #switch_category = sCategory_form.save(commit=False)
-                addedCourse = form.save(commit=False)
-                addedCourse.user = currentUser
-                addedCourse.save()
+    #if user is actually logged in, not anonymous
+    if currentUser.id != None:
+        currentUserEx = UserExtended.objects.filter(user = request.user)
+        fullName = currentUser.get_full_name()
 
-            #create the Academic task category for the new user
-            academicCategory = Category.objects.create(user = currentUser, name = "Academic")
-            academicCategory.save()
+        if(currentUserEx.exists()):
+            currentUserEx = currentUserEx[0]
+            isAdvisor = currentUserEx.advisor
+            coursesTaken = CourseTaken.objects.filter(user = currentUser)
+    
+            #add course to list of already taken courses for user
+            if request.method == 'POST':
+                form = CourseTakenForm(data = request.POST)
+                if form.is_valid():
+                    #create category object
+                    #switch_category = sCategory_form.save(commit=False)
+                    addedCourse = form.save(commit=False)
+                    addedCourse.user = currentUser
+                    addedCourse.save()
+
+                #create the Academic task category for the new user
+                academicCategory = Category.objects.create(user = currentUser, name = "Academic")
+                academicCategory.save()
+            else:
+                form = CourseTakenForm()
         else:
-            form = CourseTakenForm()
-    else:
-        existsVal = False
+            existsVal = False
 
     return render(
         request, 
@@ -98,7 +104,7 @@ def profile(request):
         {
             'currentUser': currentUser,
             'currentUserEx': currentUserEx,
-            'fullName': currentUser.get_full_name(),
+            'fullName': fullName,
             'coursesTaken': coursesTaken,
             'existingCourseForm': form,
             'new_added_course': new_added_course,
@@ -117,10 +123,13 @@ def courseRegister(request):
     )
 
 def home(request):
-    #list of all tasks
-    allTasks = Task.objects.filter(user = request.user)
-    today = datetime.today()
-    todaysTasks = allTasks.filter(endDate__year = today.year, endDate__month = today.month, endDate__day = today.day)
+    todaysTasks = []
+    #if request.user.is_anonymous():
+    if request.user.id != None:
+        #list of all tasks
+        allTasks = Task.objects.filter(user = request.user)
+        today = datetime.today()
+        todaysTasks = allTasks.filter(endDate__year = today.year, endDate__month = today.month, endDate__day = today.day)
     return render(
         request, 
         "courseRegistration/home.html", 

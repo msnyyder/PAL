@@ -4,32 +4,73 @@
         <meta charset="utf-8" />
         <title>CS 496 Project Design Practice2</title>
         <style>
+            
+            /*Nav bar*/
+            .navbar {
+                background-color: maroon;
+                font-size: 1em;
+                font-family: 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                width: 100%;
+                display: inline-block;                
+            }
+
             body{
                 padding:12px;
-                background-color: red;
+                background-color: white;
             }
-            .advice-block{
-                text-align: right;
+
+            .navbar a {
+                text-decoration: none;
+                color: inherit;
             }
             
-            .advice{
+            .navbar-brand {
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+            
+            .navbar-item {
+                font-variant: small-caps;
+                margin-left: 30px;
                 display: inline-block;
-                border: 2px solid black;
-                background-color: white;
-                text-align: center;
-                width: 5%;
-                height: 5%;
+                float: right;
+                font-size: 20px;
             }
 
-            .homeBtn {
-                display: inline-block;
+            #homeBtn_navBar {
                 float: left;
+                font-size: 40px;
             }
 
-            .homeBtnLink{
+            .mini-navBar {
+                background-color: lightgray;
+                font-size: 1em;
+                padding: 8px 5px 8px 5px;
+                display: inline-block;  
+                text-align: center;   
+                width: 50%; 
+                margin-left: 25%;         
+            }
+            
+            .navbar a {
                 text-decoration: none;
-                color: black;
-                font-size: 40px;
+                color: inherit;
+            }
+            
+            .navbar-brand {
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+            
+            .navbar-item {
+                font-variant: small-caps;
+                margin-left: 30px;
+                display: inline-block;
+                font-size: 20px;
+            }
+
+            .tabover{
+                margin-left: 70px;
             }
 
             h1, h2{
@@ -57,6 +98,11 @@
                 width: fit-content;
             }
 
+            .boxBorder {
+                padding: 20px;
+                border: 2px solid black;
+            }
+
             .weekdays {
                 margin: 0;
                 padding: 10px 0;
@@ -75,7 +121,8 @@
                 text-decoration: none;
                 box-shadow: 5px 5px 10px black;
                 padding: 2%;   
-                margin: 2%;             
+                margin: 2%;  
+                background: lightgray;           
             }
 
             #dateText {
@@ -117,19 +164,26 @@
         </style>
     </head>
     <body>
-        <div class = "advice-block">
-            <div class = "homeBtn"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
-            <div class = "advice"><a href = "{%url 'login'%}">Login</a></div>
-            <div class = "advice"><a href = "google.com">Video</a></div>
-            <div class = "advice"><a href = "google.com">Chat</a></div>
-            <div class = "advice"><a href = "{%url 'profile'%}">Profile</a></div>
+        <div class = "navbar">
+            <div class = "navbar-item" id = "homeBtn_navBar"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
+            <div class = "navbar-item"><a href = "{%url 'login'%}">Login</a></div>
+            <div class = "navbar-item"><a href="{% url 'scheduler' %}">Course Scheduler</a></div>
+            <div class = "navbar-item"><a href = "google.com">Video</a></div>
+            <div class = "navbar-item"><a href = "google.com">Chat</a></div>
+            <div class = "navbar-item"><a href = "{%url 'profile'%}">Profile</a></div>
         </div>
+
         <br> 
         <h1>Task Manager</h1>
-
+            <div class = "mini-navBar">
+                <div class = "mini-item"><a class = "btnTxt" href="{%url 'new_category'%}">Add Category</a>
+                <span class = "tabover"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></span></div>
+            </div>
+            <br><br><br>
         <div class = "box">
             <div class = "box1">
                 <h2>{{chosenCategory.name}} Task Calendar</h2>
+                
                 {%for task in tasks%}
                 <div id = "taskBox">
                     <b>{{task.title}}</b> 
@@ -142,6 +196,7 @@
             </div>
             <div class = "box2">
                 <h2>Task Calendar</h2>
+                <div class = 'boxBorder'>
                 <table>
                     <tr class = "weekdays">
                         <td>Su</td>
@@ -154,12 +209,11 @@
                     </tr>
                 </table>
                 <div id = "calendar"></div>
+                </div>
             </div>
         </div>
     
         <!--List of all available categories to the current user-->
-        <br>
-
         <form method="post" style="margin-top: 1.3em;">
             {{ form.as_p }}
             {% csrf_token %}
@@ -173,22 +227,19 @@
         {%endfor%}
         </div>
 
-
-        <div class = "btn"><a class = "btnTxt" href="{%url 'new_category'%}">Add Category</a></div>
-        <br>
-        <div class = "btn"><a class = "btnTxt" href="{%url 'new_task' chosenCategory%}">Add Task</a></div>
-        <br>
-        <div class = "btn"><a class = "btnTxt"  href="{% url 'scheduler' %}">Course Scheduler</a></div>
         
         
-        {{taskDays.first.endDate.date}}
+        {{taskDays}}<br>
+        {{taskDays.first.date}}
         <div id = "temp">words here</div>
+        
+        
         <script>
 
             var x ="", i, j;
             var cnt = 1;
             var spaceCnt = 0;
-           // x = x + withinRange(3);
+            //withinRange(3);
             x = x + "<table>";
 
             x = x + "<tr>";
@@ -233,13 +284,16 @@
 
             //document.getElementById("temp").innerHTML = withinArray(15);
 
-        /*function withinArray(numDay){
-            newDate = "<p>" + new Date({{currentYear}}, {{month}}, numDay) + "</p>";
+        function withinArray(numDay){
+            
+            newDate = new Date({{currentYear}}, {{month}}, numDay);
+            document.getElementById("temp").innerHTML = newDate;
             for (testTask of {{taskDays}}) {
-                if(newDate == testTask.endDate)
+                if(newDate == testTask)
                     return true;
-            }   
-        }*/
+            }
+            return false;   
+        }
 
         </script>
     </body>
