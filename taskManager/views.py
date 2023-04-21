@@ -44,6 +44,8 @@ def taskPage(request):
     currentYear = datetime.now().year
     amountOfDays = getDays(currentMonth, currentYear)
 
+    task_days = tasks.filter(endDate__month__gte = currentMonth)
+
     #get first day of the week (weekday) for calendar
     firstDate = datetime(currentYear, currentMonth, 1)
     startWeekDay = firstDate.weekday()
@@ -60,8 +62,10 @@ def taskPage(request):
             'days': amountOfDays,
             'month': currentMonth,
             'currentDay': currentDay,
+            'currentYear': currentYear,
             'listOfDays': listOfDays,
             'startWeekDay':startWeekDay,
+            'taskDays' : task_days,
         }
     )
 
