@@ -7,37 +7,15 @@ from datetime import datetime
 
 # Create your views here.
 def taskPage(request):
-    #get all of the current user's categories 
-    categories = Category.objects.filter(user = request.user)
-    #get all tasks for default category group
-    defaultCategory = Category.objects.filter(name = "Academic", user = request.user)
+    #initial variables
+    categories = None
+    tasks = None
+    switch_category = None
+    sCategory_form = None
+    listOfDays = None
+    task_days = None
 
-    #automatically create Academic category if it does not exist
-    switch_category = defaultCategory[0]
-    
-    #get selected option from dropdown menu
-    #if request.GET.get('dropdown') != None:
-    #    switch_category = request.GET.get('dropdown')
-    
-    if request.method == 'POST':
-        sCategory_form = SwitchCategoryForm(data = request.POST)
-        if sCategory_form.is_valid():
-            #create category object
-            #switch_category = sCategory_form.save(commit=False)
-            oneName = sCategory_form.cleaned_data['allCategories']
-            #switch_category.save()
-            switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
-
-    else:
-        sCategory_form = SwitchCategoryForm()
-
-    #list of all tasks
-    taskstemp = Task.objects.filter(category = switch_category)
-    tasks = taskstemp.filter(user = request.user)
-
-    #list of all the enddates for every task
-    listOfDays = tasks.values('endDate')
-
+    #making the task calendar
     #values for the current date
     currentDay = datetime.now().day
     currentMonth = datetime.now().month
@@ -47,6 +25,46 @@ def taskPage(request):
     #get first day of the week (weekday) for calendar
     firstDate = datetime(currentYear, currentMonth, 1)
     startWeekDay = firstDate.weekday()
+
+    #see if user is actually logged in 
+    if request.user.id != None:
+        #get all of the current user's categories 
+        categories = Category.objects.filter(user = request.user)
+        #get all tasks for default category group
+        defaultCategory = Category.objects.filter(name = "Academic", user = request.user)
+
+        #automatically create Academic category if it does not exist
+        switch_category = defaultCategory[0]
+    
+        #get selected option from dropdown menu
+        #if request.GET.get('dropdown') != None:
+        #    switch_category = request.GET.get('dropdown')
+    
+        if request.method == 'POST':
+            sCategory_form = SwitchCategoryForm(data = request.POST)
+            if sCategory_form.is_valid():
+                #create category object
+                #switch_category = sCategory_form.save(commit=False)
+                oneName = sCategory_form.cleaned_data['allCategories']
+                #switch_category.save()
+                switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
+
+        else:
+            sCategory_form = SwitchCategoryForm()
+
+        #list of all tasks
+        taskstemp = Task.objects.filter(category = switch_category)
+        tasks = taskstemp.filter(user = request.user)
+
+        #list of all the enddates for every task
+        listOfDays = tasks.values('endDate')
+        task_days_dateTime = tasks.filter(endDate__month__gte = currentMonth)
+        
+        task_days = [None] * task_days_dateTime.count()
+        cnt = 0
+        for day in task_days_dateTime:
+            task_days[cnt] = day.endDate.date()
+            cnt = cnt + 1
 
     return render(
         request,
@@ -60,8 +78,10 @@ def taskPage(request):
             'days': amountOfDays,
             'month': currentMonth,
             'currentDay': currentDay,
+            'currentYear': currentYear,
             'listOfDays': listOfDays,
             'startWeekDay':startWeekDay,
+            'taskDays' : task_days,
         }
     )
 
