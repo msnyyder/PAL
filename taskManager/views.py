@@ -4,7 +4,6 @@ from .forms import *
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 
-
 # Create your views here.
 def taskPage(request):
     #initial variables
@@ -59,12 +58,15 @@ def taskPage(request):
         #list of all the enddates for every task
         listOfDays = tasks.values('endDate')
         task_days_dateTime = tasks.filter(endDate__month__gte = currentMonth)
-        
+        #task_days = task_days_dateTime
         task_days = [None] * task_days_dateTime.count()
+        task_array = [None] * task_days_dateTime.count()
         cnt = 0
         for day in task_days_dateTime:
-            task_days[cnt] = day.endDate.date()
+            task_days[cnt] = day.endDate.date().day
+            task_array[cnt] = day
             cnt = cnt + 1
+
 
     return render(
         request,
@@ -82,6 +84,7 @@ def taskPage(request):
             'listOfDays': listOfDays,
             'startWeekDay':startWeekDay,
             'taskDays' : task_days,
+            'taskDaysDateTime': task_array,
         }
     )
 
