@@ -80,7 +80,7 @@
             
             .box1, .box2{
                 background-color: white;
-                margin-bottom: 5%;
+                margin-bottom: 1%;
                 display: inline-block;
             }
             
@@ -226,29 +226,18 @@
             <p>{{cat}}</p>
         {%endfor%}
         </div>
-
-        
-        
-        {{taskDays}}<br>
-        {{taskDays.first.date}}
-        <div id = "temp">words here</div>
-        
         
         <script>
-
             var x ="", i, j;
             var cnt = 1;
             var spaceCnt = 0;
-            //withinRange(3);
             x = x + "<table>";
-
             x = x + "<tr>";
             //first row of table
             for(s = 1; s <= 7; s++){
                 //print spaces
                 if(spaceCnt <= {{startWeekDay}}){
                     x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>  </td>";
-
                     spaceCnt = spaceCnt + 1;
                 }
                 else{
@@ -265,13 +254,17 @@
             for(j = 1; j <=5; j++){
                 x = x + "<tr>";
                 for (i=1; i<=7 && cnt <= {{days}}; i++) {
-
-                    //if(withinArray(cnt) && cnt == {{currentDay}})
-                    //    x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;background-color:lightgreen'>" + cnt + "</td>";
-                    //else if(withinArray(cnt))
-                    //    x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;'>" + cnt + "</td>";
-                    if(cnt == {{currentDay}})
+                    var index = withinArray(cnt)
+                    //if task is due today 
+                    if(index != -1 && cnt == {{currentDay}})
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;background-color:lightgreen'>" + cnt + "</td>";
+                    //if task is due on this day
+                    else if(index != -1)
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;'>" + cnt + "</td>";
+                    //if it is today
+                    else if(cnt == {{currentDay}})
                         x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
+                    //regular day
                     else
                         x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
 
@@ -281,18 +274,17 @@
             }
             x = x + "</table>";
             document.getElementById("calendar").innerHTML = x;
-
-            //document.getElementById("temp").innerHTML = withinArray(15);
+            
 
         function withinArray(numDay){
-            
-            newDate = new Date({{currentYear}}, {{month}}, numDay);
-            document.getElementById("temp").innerHTML = newDate;
-            for (testTask of {{taskDays}}) {
-                if(newDate == testTask)
-                    return true;
+            var index = -1;
+            var cnt = 0;
+            for (testDay of {{taskDays}}) {
+                if(numDay == testDay)
+                    return cnt;
+                cnt++;
             }
-            return false;   
+            return index;   
         }
 
         </script>
