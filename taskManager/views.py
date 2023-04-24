@@ -1,9 +1,71 @@
 from django.shortcuts import render
 from .models import *
 from .forms import *
-from django.shortcuts import get_object_or_404
 from datetime import datetime
+import time
+import json
 
+from django.http.response import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .agora_key.RtcTokenBuilder import RtcTokenBuilder
+import random
+
+
+def lobby(request):
+    return render(request, 'lobby.html')
+
+def room(request):
+    return render(request, 'room.html')
+
+
+def getToken(request):
+    appId = "20314f62eba145a6a59267e867edb8c0"
+    appCertificate = "e5dc4ec5b39845b9b8569f00ebddedeb"
+    channelName = request.GET.get('channel')
+    uid = random.randint(1, 230)
+    expirationTimeInSeconds = 3600
+    currentTimeStamp = int(time.time())
+    privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+    role = 1
+
+    token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+
+    return JsonResponse({'token': token, 'uid': uid}, safe=False)
+
+
+@csrf_exempt
+def createMember(request):
+    data = json.loads(request.body)
+    member, created = RoomMember.objects.get_or_create(
+        name=data['name'],
+        uid=data['UID'],
+        room_name=data['room_name']
+    )
+    return JsonResponse({'name':data['name']}, safe=False)
+
+
+def getMember(request):
+    uid = request.GET.get('UID')
+    room_name = request.GET.get('room_name')
+
+    member = RoomMember.objects.get(
+        uid=uid,
+        room_name=room_name,
+    )
+    name = member.name
+    return JsonResponse({'name':member.name}, safe=False)
+
+@csrf_exempt
+def deleteMember(request):
+    data = json.loads(request.body)
+    member = RoomMember.objects.get(
+        name=data['name'],
+        uid=data['UID'],
+        room_name=data['room_name']
+    )
+    member.delete()
+    return JsonResponse('Member deleted', safe=False)
 
 # Create your views here.
 def taskPage(request):

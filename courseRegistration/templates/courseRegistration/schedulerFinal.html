@@ -46,6 +46,26 @@
     <link rel="stylesheet" href="assets/css/untitled.css">
 </head>
 {% block content %}
+
+<h2>
+Taken: 
+{%for course in taken%}
+    {{course.course}}
+{%endfor%}
+</h2>
+
+<form action="{% url 'addCourse'%}" method="POST">
+    {% csrf_token %}
+    {{addCourseForm.as_p}}
+    <input type="submit" href="addCourse" class="btn btn-success" value="Submit">
+</form>
+
+<form action="{% url 'schedule'%}" method="POST">
+    {% csrf_token %}
+    {{registerForm.as_p}}
+    <input type="submit" href="" class="btn btn-success" value="Generate">
+</form>
+
 <body>
     <h1 style="text-align: center;">Course Registration</h1>
     <div class="table-responsive" style="transform: scale(0.96);">
@@ -53,23 +73,14 @@
             <thead>
                 <tr>
                     <th>Course Name</th>
+                    <th>Course ID</th>
                     <th>Professor</th>
                     <th>Credit Hours</th>
-                    <th>Course ID</th>
-                    <th>Delete Course</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="text-start">
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 2</td>
-                    <td>Cell 2</td>
-                    <td><button class="btn btn-sm link-danger d-md-flex" type="button">X</button></td>
-                </tr>
-                <tr></tr>
-                <tr></tr>
-            </tbody>
+            {% autoescape off %}
+                {{code}}
+            {% endautoescape %}
         </table>
     </div>
     <div class="btn-toolbar"></div>

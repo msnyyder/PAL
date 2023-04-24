@@ -8,6 +8,18 @@ from django.contrib.auth.models import User
 #class ExistingCourseForm(Form):
 #    allCourses = forms.ModelChoiceField(queryset = Course.objects.all())
 
+class ModifyCourse(Form):
+    Choices = (
+        ('add', 'Add'),
+        ('remove', 'Remove')
+    )
+    course = forms.CharField(label="Course", max_length=10)
+    addStatus = forms.ChoiceField(label = "Add or Remove", widget=forms.Select, choices = Choices)
+
+class RegisterForm(Form):
+    ACT = forms.BooleanField(label='ACT')
+    MPE = forms.BooleanField(label='MPE')
+
 class CourseTakenForm(forms.ModelForm):
     class Meta:
         model = CourseTaken

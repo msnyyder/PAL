@@ -53,8 +53,8 @@ class Course(models.Model):
     
 #Table for Courses Taken
 class CourseTaken(models.Model):
-    user = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='user_of_course')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    course = models.CharField(max_length=20)
 
     def __str__(self):
         return self.course.title
