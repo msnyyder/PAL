@@ -82,7 +82,7 @@ def taskPage(request):
     #    switch_category = request.GET.get('dropdown')
     
     if request.method == 'POST':
-        sCategory_form = SwitchCategoryForm(data = request.POST)
+        sCategory_form = SwitchCategoryForm(request.user, data = request.POST)
         if sCategory_form.is_valid():
             #create category object
             #switch_category = sCategory_form.save(commit=False)
@@ -90,12 +90,12 @@ def taskPage(request):
             #switch_category.save()
             switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
 
+
     else:
-        sCategory_form = SwitchCategoryForm()
+        sCategory_form = SwitchCategoryForm(request.user)
 
     #list of all tasks
-    taskstemp = Task.objects.filter(category = switch_category)
-    tasks = taskstemp.filter(user = request.user)
+    tasks = Task.objects.filter(category = switch_category, user = request.user)
 
     #list of all the enddates for every task
     listOfDays = tasks.values('endDate')

@@ -17,9 +17,13 @@ class TaskForm(forms.ModelForm):
         widgets = {'startDate':forms.SelectDateWidget, 'endDate':forms.SelectDateWidget, 'reminderDate':forms.SelectDateWidget}
 
 class SwitchCategoryForm(Form):
-    allCategories = forms.ModelChoiceField(queryset = Category.objects.all())
-    #allCategories = forms.ModelChoiceField(queryset = Category.objects.filter(user__id = 1))
-    
+    def __init__(self, user, *args, **kwargs):
+        super(SwitchCategoryForm, self).__init__(*args, **kwargs)
+        self.user = user
+        CHOICES = Category.objects.filter(user=self.user).distinct().values('name')
+        CHOICES = [(choice['name'], choice['name']) for choice in CHOICES]
+        self.fields['allCategories'] = forms.ChoiceField(choices=CHOICES, required=True)
+
 
 
 
