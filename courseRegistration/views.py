@@ -182,7 +182,7 @@ class Schedule:
                         titles.append(row['Title'])
                         crns.append(row['CRN'])
                         profs.append(row['Instructor'])
-                        hours.append(row['Cred'])
+                        hours.append(round(float(row['Cred'])))
                 elif len(all_left) == 0:
                     titles.append(course)
                     crns.append('')
@@ -368,7 +368,7 @@ def home(request):
             request, 
             "courseRegistration/home.html", 
             {
-                'todaysTasks':todaysTasks,
+                'todaysTasks':todaysTasks
             }
         )
     else:
@@ -376,6 +376,6 @@ def home(request):
             request, 
             "courseRegistration/home.html", 
             {
-                'todaysTasks':None,
+                'todaysTasks':None
             }
         )
