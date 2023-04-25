@@ -1,26 +1,12 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import auth
 from django.contrib import messages
 from datetime import date
 from .models import *
 from taskManager.models import *
 from .forms import *
-import os
-import time
 from .Objs import Schedule
 
-import PALAPP
-
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import login
-import os
-
-import PALAPP
-import pandas as pd
-import numpy as np
+from django.shortcuts import  render, redirect
 
 # Create your views here.
 def login(request):
