@@ -166,9 +166,11 @@
     <body>
         <div class = "navbar">
             <div class = "navbar-item" id = "homeBtn_navBar"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
-            <div class = "navbar-item"><a href = "{%url 'login'%}">Login</a></div>
-            <div class = "navbar-item"><a href="{% url 'scheduler' %}">Course Scheduler</a></div>
+            
+            <div class = "navbar-item"><a href = "{%url 'logout'%}">Logout</a></div>
+            <div class = "navbar-item"><a href="{% url 'taskPage' %}">Task Manager</a></div>
             <div class = "navbar-item"><a href = "chat">Chat</a></div>
+            <div class = "navbar-item"><a href="{% url 'scheduler' %}">Course Registration</a></div>
             <div class = "navbar-item"><a href = "{%url 'profile'%}">Profile</a></div>
         </div>
 
@@ -211,6 +213,70 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            var x ="", i, j;
+            var cnt = 1;
+            var spaceCnt = 0;
+            x = x + "<table>";
+            x = x + "<tr>";
+            //first row of table
+            for(s = 1; s <= 7; s++) {
+                //print spaces
+                if(spaceCnt <= {{startWeekDay}}) {
+                    x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>  </td>";
+                    spaceCnt = spaceCnt + 1;
+                } else {
+                    if(cnt == {{currentDay}}) {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
+                    } else {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
+                    }
+                    cnt = cnt + 1;
+                }
+            }
+            x = x + "</tr>";
+
+            for(j = 1; j <=5; j++) {
+                x = x + "<tr>";
+                for (i=1; i<=7 && cnt <= {{days}}; i++) {
+                    var index = withinArray(cnt)
+                    //if task is due today 
+                    if(index != -1 && cnt == {{currentDay}}) {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;background-color:lightgreen'>" + cnt + "</td>";
+                    //if task is due on this day
+                    } else if(index != -1) {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;'>" + cnt + "</td>";
+                    //if it is today
+                    } else if(cnt == {{currentDay}}) {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
+                    //regular day
+                    } else {
+                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
+                    }
+                    cnt = cnt + 1;
+                }
+                x = x + "</tr>";
+            }
+            x = x + "</table>";
+            document.getElementById("calendar").innerHTML = x;
+            
+
+        function withinArray(numDay) {
+            var index = -1;
+            var cnt = 0;
+            for (testDay of {{taskDays}}) {
+                if(numDay == testDay) {
+                    return cnt;
+                }
+                    
+                cnt++;
+            }
+
+            return index;   
+        }
+
+        </script>
     
         <!--List of all available categories to the current user-->
         <form method="post" style="margin-top: 1.3em;">
@@ -226,68 +292,5 @@
         {%endfor%}
         </div>
         
-        <script>
-            var x ="", i, j;
-            var cnt = 1;
-            var spaceCnt = 0;
-            x = x + "<table>";
-            x = x + "<tr>";
-            //first row of table
-            for(s = 1; s <= 7; s++){
-                //print spaces
-                if(spaceCnt <= {{startWeekDay}}){
-                    x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>  </td>";
-                    spaceCnt = spaceCnt + 1;
-                }
-                else{
-                    if(cnt == {{currentDay}})
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
-                    else
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
-                
-                    cnt = cnt + 1;
-                }
-            }
-            x = x + "</tr>";
-
-            for(j = 1; j <=5; j++){
-                x = x + "<tr>";
-                for (i=1; i<=7 && cnt <= {{days}}; i++) {
-                    var index = withinArray(cnt)
-                    //if task is due today 
-                    if(index != -1 && cnt == {{currentDay}})
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;background-color:lightgreen'>" + cnt + "</td>";
-                    //if task is due on this day
-                    else if(index != -1)
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px; color:red; text-decoration:underline;'>" + cnt + "</td>";
-                    //if it is today
-                    else if(cnt == {{currentDay}})
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;background-color:lightgreen'>" + cnt + "</td>";
-                    //regular day
-                    else
-                        x = x + "<td style='margin: 0;padding: 10px 0;width: 15.15%;text-align: center;margin-bottom: 5px;'>" + cnt + "</td>";
-
-                    cnt = cnt + 1;
-                }
-                x = x + "</tr>";
-            }
-            x = x + "</table>";
-            document.getElementById("calendar").innerHTML = x;
-            
-
-        function withinArray(numDay){
-            var index = -1;
-            var cnt = 0;
-            for (testDay of {{taskDays}}) {
-                if(numDay == testDay)
-                    return cnt;
-                    
-                cnt++;
-            }
-
-            return index;   
-        }
-
-        </script>
     </body>
 </html>

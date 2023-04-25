@@ -150,6 +150,7 @@ def taskPage(request):
             'startWeekDay':startWeekDay,
             'taskDays' : task_days,
             'taskDaysDateTime': task_array,
+            'auth' : True
         }
     )
 

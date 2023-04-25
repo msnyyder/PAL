@@ -17,8 +17,8 @@ class ModifyCourse(Form):
     addStatus = forms.ChoiceField(label = "Add or Remove", widget=forms.Select, choices = Choices)
 
 class RegisterForm(Form):
-    ACT = forms.BooleanField(label='ACT')
-    MPE = forms.BooleanField(label='MPE')
+    ACT = forms.BooleanField(label='ACT', required=False)
+    MPE = forms.BooleanField(label='MPE', required=False)
 
 class CourseTakenForm(forms.ModelForm):
     class Meta:
