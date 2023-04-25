@@ -166,10 +166,11 @@
     <body>
         <div class = "navbar">
             <div class = "navbar-item" id = "homeBtn_navBar"><a class = "homeBtnLink" href = "{%url 'home'%}"><strong>PAL</strong></a></div>
-            <div class = "navbar-item"><a href = "{%url 'login'%}">Login</a></div>
-            <div class = "navbar-item"><a href="{% url 'scheduler' %}">Course Scheduler</a></div>
-            <div class = "navbar-item"><a href = "google.com">Video</a></div>
-            <div class = "navbar-item"><a href = "google.com">Chat</a></div>
+            
+            <div class = "navbar-item"><a href = "{%url 'logout'%}">Logout</a></div>
+            <div class = "navbar-item"><a href="{% url 'taskPage' %}">Task Manager</a></div>
+            <div class = "navbar-item"><a href = "chat">Chat</a></div>
+            <div class = "navbar-item"><a href="{% url 'scheduler' %}">Course Registration</a></div>
             <div class = "navbar-item"><a href = "{%url 'profile'%}">Profile</a></div>
         </div>
 
