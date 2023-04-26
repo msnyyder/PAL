@@ -1,4 +1,3 @@
-from urllib import request
 from .models import *
 from django import forms
 from django.forms import Form
@@ -19,6 +18,10 @@ class ModifyCourse(Form):
 class RegisterForm(Form):
     ACT = forms.BooleanField(label='ACT', required=False)
     MPE = forms.BooleanField(label='MPE', required=False)
+    def __init__(self, user, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.user = user
+        self.fields['user'] = forms.ModelChoiceField(queryset=User.objects.all(), label='User to Schedule As', initial=self.user)
 
 class CourseTakenForm(forms.ModelForm):
     class Meta:

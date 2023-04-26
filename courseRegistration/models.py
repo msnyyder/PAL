@@ -27,3 +27,7 @@ class CourseTaken(models.Model):
 
     def __str__(self):
         return self.course.title
+    
+class ScheduleAs(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
+    scheduleAs = models.ForeignKey(User, on_delete=models.CASCADE, related_name="scheduleas")

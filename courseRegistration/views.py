@@ -19,6 +19,9 @@ def new_user(request):
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            scheduleAs = ScheduleAs(user=user, scheduleAs=user)
+            scheduleAs.save()
+
             login(request)
             messages.success(request, "Registration Successful")
             #return new_user2(request)
@@ -108,11 +111,11 @@ def profile(request):
 
 def schedule(request):
     if request.method == 'POST':
-        scheduleForm = RegisterForm(data = request.POST)
+        scheduleForm = RegisterForm(request.user, data = request.POST)
         if scheduleForm.is_valid():
             data = scheduleForm.cleaned_data
         
-            schedule = Schedule(data['ACT'], data['ACT'], list(CourseTaken.objects.filter(user=request.user).values_list('course', flat=True)))
+            schedule = Schedule(data['ACT'], data['ACT'], list(CourseTaken.objects.filter(user=data['user']).values_list('course', flat=True)))
             titles, crns, profs, hours = schedule.schedule()
             #print(schedule.data.dtypes)
             code = ''
@@ -135,7 +138,7 @@ def schedule(request):
                     'taken' : CourseTaken.objects.filter(user=request.user),
                     'code' : code,
                     'addCourseForm' : ModifyCourse(),
-                    'registerForm' : RegisterForm(),
+                    'registerForm' : RegisterForm(request.user),
                     'auth' : True
                 }
             )
@@ -166,7 +169,7 @@ def courseRegister(request, MPE=False, ACT=False):
             'taken' : CourseTaken.objects.filter(user=request.user),
             'code' : code,
             'addCourseForm' : ModifyCourse(),
-            'registerForm' : RegisterForm(),
+            'registerForm' : RegisterForm(request.user),
             'auth' : True
         }
     )
