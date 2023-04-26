@@ -7,27 +7,6 @@ class ExtendedUserDisplay(admin.ModelAdmin):
     search_fields = ('user', 'major', 'advisor')
 admin.site.register(UserExtended, ExtendedUserDisplay)
 
-#display all schedules
-class ScheduleDisplay(admin.ModelAdmin):
-    list_display = ('name', 'semester', 'year', 'courses')
-    search_fields = ('name', 'semster', 'year')
-admin.site.register(Schedule, ScheduleDisplay)
-
-class RealScheduleDisplay(admin.ModelAdmin):
-    list_display = ('grades',)
-admin.site.register(RealSchedule, RealScheduleDisplay)
-
-class DraftScheduleDisplay(admin.ModelAdmin):
-    list_display = ('advisorNotes', 'draftRanking')
-    search_fields = ('draftRanking',)
-admin.site.register(DraftSchedule, DraftScheduleDisplay)
-
-#display all courses
-class CourseDisplay(admin.ModelAdmin):
-    list_display = ('title', 'crn', 'subject', 'course', 'creditHours', 'time', 'day', 'instructor', 'year', 'term')
-    search_fields = ('crn', 'title', 'creditHours')
-admin.site.register(Course, CourseDisplay)
-
 #display all courses taken
 class CoursesTakenDisplay(admin.ModelAdmin):
     list_display = ('user', 'course')

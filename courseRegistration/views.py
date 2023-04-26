@@ -1,26 +1,12 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import auth
 from django.contrib import messages
 from datetime import date
 from .models import *
 from taskManager.models import *
 from .forms import *
-import os
-import time
 from .Objs import Schedule
 
-import PALAPP
-
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import login
-import os
-
-import PALAPP
-import pandas as pd
-import numpy as np
+from django.shortcuts import  render, redirect
 
 # Create your views here.
 def login(request):
@@ -33,6 +19,9 @@ def new_user(request):
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            scheduleAs = ScheduleAs(user=user, scheduleAs=user)
+            scheduleAs.save()
+
             login(request)
             messages.success(request, "Registration Successful")
             #return new_user2(request)
@@ -122,11 +111,11 @@ def profile(request):
 
 def schedule(request):
     if request.method == 'POST':
-        scheduleForm = RegisterForm(data = request.POST)
+        scheduleForm = RegisterForm(request.user, data = request.POST)
         if scheduleForm.is_valid():
             data = scheduleForm.cleaned_data
         
-            schedule = Schedule(data['ACT'], data['ACT'], list(CourseTaken.objects.filter(user=request.user).values_list('course', flat=True)))
+            schedule = Schedule(data['ACT'], data['ACT'], list(CourseTaken.objects.filter(user=data['user']).values_list('course', flat=True)))
             titles, crns, profs, hours = schedule.schedule()
             #print(schedule.data.dtypes)
             code = ''
@@ -149,7 +138,7 @@ def schedule(request):
                     'taken' : CourseTaken.objects.filter(user=request.user),
                     'code' : code,
                     'addCourseForm' : ModifyCourse(),
-                    'registerForm' : RegisterForm(),
+                    'registerForm' : RegisterForm(request.user),
                     'auth' : True
                 }
             )
@@ -180,7 +169,7 @@ def courseRegister(request, MPE=False, ACT=False):
             'taken' : CourseTaken.objects.filter(user=request.user),
             'code' : code,
             'addCourseForm' : ModifyCourse(),
-            'registerForm' : RegisterForm(),
+            'registerForm' : RegisterForm(request.user),
             'auth' : True
         }
     )
