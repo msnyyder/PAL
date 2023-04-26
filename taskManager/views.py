@@ -34,18 +34,12 @@ def taskPage(request):
 
         #automatically create Academic category if it does not exist
         switch_category = defaultCategory[0]
-    
-        #get selected option from dropdown menu
-        #if request.GET.get('dropdown') != None:
-        #    switch_category = request.GET.get('dropdown')
-    
+        #user wants to switch between their categories
         if request.method == 'POST':
             sCategory_form = SwitchCategoryForm(request.user, data = request.POST)
             if sCategory_form.is_valid():
-                #create category object
-                #switch_category = sCategory_form.save(commit=False)
+                #get user chosen category from form
                 oneName = sCategory_form.cleaned_data['allCategories']
-                #switch_category.save()
                 switch_category = Category.objects.filter(name = oneName, user = request.user)[0]
 
         else:
